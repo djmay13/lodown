@@ -143,11 +143,11 @@ module.exports.unique = unique;
 
 /**
  * filter: Function passes each element of a given array, it's current index, and the array
- * itself into a given function to test if each is either true or false.
+ * itself into a given function to test if each is true.
  * @param {Array}: An array to iterate through and pass each element, index of each element,
  * and the array itself into the given function
  * @param {Function}: Function to pass each element of the given array, the current index,
- * and the array itself into to test if true or false
+ * and the array itself into to test if true
  */
  function filter(array, func) {
     //create output array 
@@ -164,6 +164,83 @@ module.exports.unique = unique;
     return trueArr;
 }
 module.exports.filter = filter;
+
+/**
+ * reject: Function passes each element of a given array, it's current index, and the array
+ * itself into a given function to test if each is false.
+ * @param {Array}: An array to iterate through and pass each element, index of each element,
+ * and the array itself into the given function
+ * @param {Function}: Function to pass each element of the given array, the current index,
+ * and the array itself into to test if false
+ */
+ function reject(array, func) {
+    //create output array
+    var falseArr = [];
+    //iterate through array
+    for(var i=0; i<array.length; i++) {
+    //determine if which elememnt in array results to false when passed into func  
+            if(func(array[i], i, array) === false) {
+    //push values in array that equate to false to output array
+            falseArr.push(array[i]);
+            }
+    //return output array
+        }
+        return falseArr;
+}
+module.exports.reject = reject;
     
+/**
+ * partition: Function passes each element of a given array, it's current index, and the array itself 
+ * into a given function and returns an array of sub-arrays of values that returned truthy or falsy
+ * @param {Array}: An array that has each of it's elements, the current index of each element and is 
+ * itself passed into the given function.
+ * @param {Function}: A function. that takes in each element of the array, it's current index, and the 
+ * array to test if each results to truthy of falsy.
+ */
+ function partition(array, func) {
+    //create output array for truthy values
+       var trueArr = [];
+    //create output array for falsy values
+       var falseArr = [];
+    //iterate through array
+        for(var i=0; i<array.length; i++) {
+    //determine if values result to falsy and place in falseArr
+            if(func(array[i], i, array)===false) {
+            falseArr.push(array[i]);
+    //if not false place in trueArr
+            }else {
+                trueArr.push(array[i]);
+            }
+    //place both sub arrays in an array
+          var arr=[trueArr,falseArr];
+        }
+        return arr;
+}
+module.exports.partition = partition;    
+    
+/**
+ * map: Function
+ */
+ function map(collection, func) {
+    var mapped = [];
+    //determine if collection is an array
+    if (Array.isArray(collection)) {
+    //iterate through array
+        for (var i = 0; i < collection.length; i++) {
+    //invoke callback array and pass in the current value of collection, current index, and collection
+            var result = func(collection[i], i, collection);
+             mapped.push(result); 
+        }
+     //else it's an object
+    } else {
+        for (var key in collection) {
+            var result = func(collection[key], key, collection);
+            mapped.push(result);
+        }
+    }
+    return mapped;
+
+}
+module.exports.map = map;
     
     
