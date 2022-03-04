@@ -219,7 +219,11 @@ module.exports.reject = reject;
 module.exports.partition = partition;    
     
 /**
- * map: Function
+ * map: Function passes an array or object, each of it's elements, and the current index or key into a given 
+ * function and stores the returned value of function call into a new array and returns the new array.  
+ * @param {Array or Object} collection: An array or object that is passed into the function paramenter along with 
+ * each of it's elements, and the current index or key.
+ * @param {Function}: A function to pass the collection, each element, and the current index or key into
  */
  function map(collection, func) {
     var mapped = [];
@@ -243,4 +247,136 @@ module.exports.partition = partition;
 }
 module.exports.map = map;
     
+/**
+ * pluck: Function returns an array of each value of the properties contained in an array of objects
+ * @param {Array}: An array of objects
+ * @param {Property}: The properties of the given Array of objects
+ */
+ function pluck(array, property) {
+    //create output array
+    var arr = [];
+    //iterate through array
+    for(var i=0; i<array.length; i++) {
+    //place property for every element into output array
+    arr.push(array[i][property])
+    }
+    return arr;
+    }
+module.exports.pluck = pluck;
+
+/**
+ * every: Function passes an array or object, each of it's elements, and the current index or key 
+ * and returns true if every element results to true or, if no function is provided and each element is truthy,
+ * false if one element results to false or not all elements of collection id truthy
+ * @param {Array or Object} collection: An array or object to pass into given function
+ * @param {Function}: Function that has given collection, each of it's elements, and current index or key which tests
+ * if every element is true.
+ */
+ function every(collection, func) {
+    // determine if func is undefined
+    if (func === undefined) {
+    //determine if input collection is array
+    if (Array.isArray(collection)) {
+    //iterate through collection
+        for (var i = 0; i < collection.length; i++) {
+    //if current value is faLsey
+            if (!collection[i]) {
+                return false;
+            }
+        }
+    //else it's not array
+    }else { 
+        for (let key in collection) {
+            if (!collection[key]) {
+                return false;
+            }
+        }
+    }
+    //else it is undefined
+    //determine if collection is array
+    } else { 
+        if (Array.isArray(collection)) {
+            for (let i = 0; i < collection.length; i++) {
+                if (func(collection[i], i, collection) === false)
+                return false;
+            }
+        }
+    
+    }
+    return true;
+}
+module.exports.every = every;
+
+/**
+ * some: Function passes an array or object, each of it's elements, and the current index or key 
+ * and returns true if at least one element results to true or, if no function is provided and one element is truthy,
+ * false if all elements result to false or not all elements of collection are truthy
+ * @param {Array or Object} collection: An array or object to pass into given function
+ * @param {Function}: Function that has given collection, each of it's elements, and current index or key which tests
+ * if any element is true.
+ */
+ function some(collection, func) {
+    // determine if func is undefined
+    if (func === undefined) {
+        //determine if input collection is array
+        if (Array.isArray(collection)) {
+        //iterate through collection
+            for (var i = 0; i < collection.length; i++) {
+        //if current value is faLsey
+                if (!collection[i]) {
+                    return false;
+                }
+            }
+        }
+        //determine if collection is array
+        } else { 
+            if (Array.isArray(collection)) {
+                for (let i = 0; i < collection.length; i++) {
+                    if (func(collection[i], i, collection) === true)
+                    return true;
+                }   if (func(collection[i], i, collection) === false)
+                    return false;
+            }
+        }
+        return true;
+}
+module.exports.some = some;
+
+/**
+ * reduce: Function executes given function on each element of the array, in order, passing in the return value from the 
+ * preceding element. The final result is a single value. The first time that the function is run there is no 'return value'. 
+ * The seed will be used as the initial value.
+ */
+ function reduce(array, func, seed) {
+    //create accumulator value
+    let accumulator; 
+    //determine if seed was not passed in
+    if (seed === undefined) {
+        accumulator = array[0];
+    //continue to nex element and iterate through array
+        for ( var i = 1; i < array.length; i++) {
+            accumulator = func(accumulator, array[i], i, array)
+        }
+    //else seed was passed in
+    }else {
+        accumulator = seed;
+        for (let i = 0; i < array.length; i++) {
+            accumulator = func(accumulator, array[i], i, array)
+        }
+    }
+        return accumulator;
+}
+module.exports.reduce = reduce;
+
+/**
+ * extend: Function copies the elements from one or more given objects in the order they are given to a single given object.
+ * and returns that array.
+ * @param {Object}: Object into which any given object will be copied
+ * @param {...inputs} objects: One or more objects that will have their elements copied into the returned object
+ */
+ function extend(object1, object2, ...inputs) {
+    Object.assign(object1, object2, ...inputs);
+    return object1
+}
+module.exports.extend = extend;
     
