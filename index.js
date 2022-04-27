@@ -4,75 +4,79 @@
 
 /**
  * identity: Function takes in any value as an argument and returns that value unchanged.
- * @param {Value}: The value to return unchanged
- * @returns {Value}: Function returns the input value unchanged
+ * @param {Any Value}: The value to return unchanged
+ * @returns {Any Value}: Function returns the input value unchanged
  */
- function identity(value) {
-    return value;
+_.identity = function(val){
+//return input unchanged
+    return val
 }
 module.exports.identity = identity;
 
 /**
  * typeOf: Function takes in a value and returns the datatype of the input value as a string
- * @param {Value}: The value to check the datatype of 
- * @returns {Value}: Function returns a string of the dataype of the input value
+ * @param {Any Value}: The value to check the datatype of 
+ * @returns {String}: Function returns a string of the dataype of the input value
  */
- function typeOf(value) {
-    if (typeof value === 'object') {
-    
-        if (Array.isArray(value)) {
-            return 'array';
-        }
-        if (value === null) {
-            return 'null';
-        }
-        if(value instanceof Date) {
-            return 'date'; 
-        }
-    }
-    if (value === 'object') {
-        return 'object'
-    }
-    else {
-        return typeof(value);
+_.typeOf = function(val){
+//return 'array' if value is an array
+    if (Array.isArray(val)) {
+        return 'array';
+//return 'null' if value is null
+    }if (val === null) {
+        return 'null';
+//return 'date' if value is an instance of a date
+    }if(val instanceof Date) {
+        return 'date'; 
+//return the data type of value
+    }else{
+        return typeof(val);
     }
 }
 module.exports.typeOf = typeOf;
 
 /**
- * first: Function returns the 'first' number of elements determined by input number.
- * @param {Array}: Function takes in array
- * @param {Number}: Function takes in a number that determines how many of the "first" elements to output.
+ * first: Function returns the first number of elements determined by input number.
+ * @param {Array}: Function takes in an array
+ * @param {Number}: Function takes in a number that determines how many elements of the array to output in ascending order.
  * @return {Value}: Function returns a number of elements determined by input number  
  */
- function first(array, number) {
-    if (Array.isArray(array) === false || number < 0) {
+_.first = function(arr, num){
+//if array is not array return empty array
+    if(!Array.isArray(arr)|| num <= 0){
         return [];
-    }else if (number === undefined || number === NaN) {
-        return array[0];
-    }else if (number > array.length) {
-     return array;
-    } else {
-        return array.slice(0,number);
+//if num is not given or NaN, return first element of array
+    }else if(num === undefined || num === NaN){
+        return arr[0];
+//if num is greater than array length, return array
+    }else if(num > arr.length){
+        return arr;
+//return number of elements from array specified by num input
+    }else{
+        return arr.slice(0, num);
     }
 }
 module.exports.first = first;
 
 /**
- * last: Function returns the 'last' number of elements determined by input number.
+ * last: Function returns the last number of elements determined by input number.
  * @param {Array}: Function takes in an array
- * @param {Number}: Function takes in a number that determines how many of the "last" elements to output.
+ * @param {Number}: Function takes in a number that determines how many elements of the array to output in descending order.
  * @return {Value}: Function returns a number of elements determined by input number 
  */
-function last(array, number) {
-    if (Array.isArray(array) === false || number < 0) {
+_.last = function(arr, num){
+//if array is not array return empty array
+    if(!Array.isArray(arr)|| num <= 0){
         return [];
-    }else if (number === undefined || number === NaN) {
-        return array[array.length-1];
-    }else if (number > array.length) {
-     return array;
-    } else {
-        return array.slice(-number);
+//if num is not given or NaN, return first element of array
+    }else if(num === undefined || num === NaN){
+        return arr[arr.length-1];
+//if num is greater than array length, return array
+    }else if(num > arr.length){
+        return arr;
+//return number of elements from array specified by num input
+    }else{
+        return arr.slice(-num);
     }
 }
 module.exports.last = last;
@@ -80,16 +84,20 @@ module.exports.last = last;
 /**
  * indexOf: Function looks through an array for a given value and returns
  * the index at which the value first occurs.
- * @param {Array}: An array to iterate through and look for given value
- * @param {Value}: A given value to check for the index of in an array
+ * @param {Array}: An array to iterate through and look for a given value
+ * @param {Any Value}: A given value to check for the index of in an array
  * @return {Number}: Function returns a number that indicates the index of the input value in the input array
  */
- function indexOf(array, value) {
-    for( var i = 0; i < array.length; i++) {
-        if (array[i] === value) {
+_.indexOf = function(arr, val){
+//iterate through array
+    for(let i=0; i<arr.length; i++){
+//determine if value is at current index
+        if(val === arr[i]){
+//if true return index
             return i;
         }
     }
+//if val is not in array return -1
     return -1;
 }
 module.exports.indexOf = indexOf;
@@ -98,282 +106,290 @@ module.exports.indexOf = indexOf;
  * contains: Function returns true if an array contains a given value and 
  * false if the array does not contain the given value.
  * @param {Array}: An array to check for the given value
- * @param {Value}: A value to check for in the array
+ * @param {Any Value}: A value to check for in the array
  * @return {Boolean}: Function returns boolean value dependent on if the input array includes input value
  */
- function contains(array, value) {
-    //use ternary operator to check if array contains value
-        return array.includes(value) ? true : false;
+_.contains = function(arr, val){
+//create output variable
+let valExists = false;
+//loop through array
+    for(let i=0; i<arr.length; i++){
+//use ternary operator to check if array contains value
+        val === arr[i] ? valExists = true : valExists
+    }
+    return valExists
 }
 module.exports.contains = contains;
 
 /**
- * each: Function loops over a collection, Array or Object, and applies the 
- * action Function to each value in the collection.
- * @param {Array or Object}: The collection over which to iterate.
+ * each: Function loops over a collection and applies a function to each value in the collection.
+ * @param {Collection}: A collection over which to iterate.
  * @param {Function}: The Function to be applied to each value in the 
  * collection
  */
- function each(collection, action) {
-    if(Array.isArray(collection)) {
-        for(var i = 0; i < collection.length; i++) {
-            action(collection[i], i, collection);
+_.each = function(collect, func){
+//determine if collect is an array
+    if(Array.isArray(collect)){
+//if true iterate through array
+        for(let i = 0; i < collect.length; i++){
+//pass current element, index, and array into func
+             func(collect[i], i, collect);
         }
-    } else {
-        for (var key in collection) {
-            action(collection[key], key, collection);
+//else coll is an object
+    }else{
+//iterate through object
+        for(let key in collect){
+//pass current key, key, and object into func
+             func(collect[key], key, collect);
         }
     }
 }
 module.exports.each = each;
 
 /**
- * unique: Function returns a new array that does not contain any duplicate elements
+ * unique: Function returns a new array of only unique elements
  * @param {Array}: An array to check for and remove duplicate elements
- * @return {Array}: Function returns an array that comntains on the unique values of the input array 
+ * @return {Array}: An array that contains only the unique values of the input array 
  */
- function unique(array) {
-    //create output array 
-    var uniqueArr = [...new Set(array)]
-        return uniqueArr;
+_.unique = function(arr){
+//create output variable
+    let output = [];
+//iterate through array
+    for(let i=0; i<arr.length; i++){
+//determine if arr contains duplicates
+        if(output.indexOf(arr[i]) === -1){
+//push unique elements to output array
+            output.push(arr[i])
+        }
+    }
+        return output;
 }
 module.exports.unique = unique;
 
 /**
- * filter: Function passes each element of a given array into an input function to test which elements evaluate to true.
- * @param {Array}: An array to pass into the given function
- * @param {Function}: Takes in callback function designed to test if individual array element is true
+ * filter: Function passes each element of a given array into an input function, and 
+ * and returns an array of the elements that evaluate to true.
+ * @param {Array}: An array to test each element against the input function
+ * @param {Function}: Function to test each element of the input array
  * @return {Array}: Function returns an array of elements from the input array that evaluted to true
  * when passed through the input function
  */
- function filter(array, func) {
-    //create output array 
-    var trueArr = [];
-    //iterate through array
-    for(var i=0; i<array.length; i++) {
-    //determine if which elerfememnt in array results to true when passed into func  
-        if( func(array[i], i, array) === true) {
-    //push values in array that equate to true to output array
-        trueArr.push(array[i]);
-        }
-        }
-    //retrun output array
-    return trueArr;
+_.filter = function(arr, func){
+//create output variable
+    let output = [];
+        for(let i=0; i<arr.length; i++){
+//pass current element, index, and array into func
+            if(func(arr[i], i, arr)){
+//if true push to output
+                output.push(arr[i])
+            }
+    }
+        return output;
 }
 module.exports.filter = filter;
 
 /**
  * reject: Function passes each element of a given array into an input function to test which elements evaluate to false.
  * @param {Array}: An array to pass into the given function
- * @param {Function}: Takes in callback function designed to test if individual array element is false
+ * @param {Function}: Function to test each array element against
  * @return {Array}: Function returns an array of elements from the input array that evaluted to false
  * when passed through the input function
  */
- function reject(array, func) {
-    //create output array
-    var falseArr = [];
-    //iterate through array
-    for(var i=0; i<array.length; i++) {
-    //determine if which elememnt in array results to false when passed into func  
-            if(func(array[i], i, array) === false) {
-    //push values in array that equate to false to output array
-            falseArr.push(array[i]);
+_.reject = function(arr, func){
+//create output variable
+    let output = [];
+        for(let i=0; i<arr.length; i++){
+//pass current element, index, and array into func
+            if(!func(arr[i], i, arr)){
+//if false push to output
+                output.push(arr[i])
             }
-    //return output array
         }
-        return falseArr;
+        return output;
 }
 module.exports.reject = reject;
     
 /**
- * partition: Function passes each element of a given array into a given function and returns an array 
+ * partition: Function passes each element of an array into a function and returns an array 
  * of sub-arrays of values that returned truthy or falsy
- * @param {Array}: An array to be passed into the given function.
- * @param {Function}: A function that takes in each element of the array to test if each results to truthy of falsy.
- * @return {Array}: Function returns an array of sub-arrays, one for truthy values and one for falsey falues
+ * @param {Array}: An array to pass each element into a given function.
+ * @param {Function}: A function that tests each element of an array for truthy or falsey values
+ * @return {Array}: Function returns an array of sub-arrays, one for truthy values and one for falsey values
  */
- function partition(array, func) {
-    //create output array for truthy values
-       var trueArr = [];
-    //create output array for falsy values
-       var falseArr = [];
-    //iterate through array
-        for(var i=0; i<array.length; i++) {
-    //determine if values result to falsy and place in falseArr
-            if(func(array[i], i, array)===false) {
-            falseArr.push(array[i]);
-    //if not false place in trueArr
-            }else {
-                trueArr.push(array[i]);
-            }
-    //place both sub arrays in an array
-          var arr=[trueArr,falseArr];
+_.partition = function(array, func){
+//create output array for truthy values
+   let trueArr = [];
+//create output array for falsy values
+   let falseArr = [];
+//iterate through array
+    for(let i=0; i<array.length; i++){
+//determine if values result to falsy and place in falseArr
+        if(!func(array[i], i, array)){
+        falseArr.push(array[i]);
+//if not false place in trueArr
+        }else{
+            trueArr.push(array[i]);
         }
-        return arr;
+//place both sub arrays in an array
+      var arr=[trueArr,falseArr];
+    }
+    return arr;
 }
 module.exports.partition = partition;    
     
 /**
- * map: Function passes an array or object into a given function and stores the returned value of function call 
+ * map: Function passes a collection into a given function and stores the returned values of function call 
  * into a new array 
- * @param {Array or Object} collection: An array or object that is passed into the function paramenter
- * @param {Function}: Takes in callback function designed to be executed on each array element
- * @return {Array}: Function returns a new array with each element being the result of the callback function.
+ * @param {Collection}: An array or object that is passed into the given function
+ * @param {Function}: Function to be performed on each value of a collection
+ * @return {Array}: Function returns a new array of elements that are the result of the given function performed.
  */
- function map(collection, func) {
-    var mapped = [];
-    //determine if collection is an array
-    if (Array.isArray(collection)) {
-    //iterate through array
-        for (var i = 0; i < collection.length; i++) {
-    //invoke callback array and pass in the current value of collection, current index, and collection
-            var result = func(collection[i], i, collection);
-             mapped.push(result); 
+_.map = function(collect, func){
+//create output array
+    let mapped = [];
+//determine if collect is an array
+    if(Array.isArray(collect)){
+//if true iterate through array
+        for(let i = 0; i < collect.length; i++){
+            mapped.push(func(collect[i], i, collect));
         }
-     //else it's an object
-    } else {
-        for (var key in collection) {
-            var result = func(collection[key], key, collection);
-            mapped.push(result);
+//else collect is an object
+    }else{
+//iterate through object
+        for(let key in collect){
+            mapped.push(func(collect[key], key, collect));
         }
     }
     return mapped;
-
 }
 module.exports.map = map;
     
 /**
  * pluck: Function returns an array of each value of the properties contained in an array of objects
  * @param {Array}: An array of objects
- * @param {Property}: The properties of the given Array of objects
+ * @param {Property}: The properties of the given array of objects
  * @return {Array}: Function returns an array of each value of the properties contained in an array of objects
  */
- function pluck(array, property) {
-    //create output array
-    var arr = [];
-    //iterate through array
-    for(var i=0; i<array.length; i++) {
-    //place property for every element into output array
-    arr.push(array[i][property])
-    }
-    return arr;
-    }
+_.pluck = function(arr, prop){
+//return invocation of map on input array
+    return _.map(arr, function(element){
+//return value at prop input
+        return element[prop];
+    });
+}
 module.exports.pluck = pluck;
 
 /**
- * every: Function passes an array or object into a callback function and returns true if every element results to true 
- * @param {Array or Object}: An array or object to pass into given function
- * @param { Function }: Takes in callback function designed to test if individual array element is true or false
- * @return {Boolean}: Function returns a boolean dependent if every value of a collection evalutes to true when passed through
- * a callback function
+ * every: Function passes a collection into a function and returns true if every element results to true 
+ * @param {Collection}: A collection to pass into given function
+ * @param { Function }: Function to test each collection value for true or false
+ * @return {Boolean}: Function returns true if every value of a collection evalutes to true when passed through
+ * a function or false if any value evaluates to false
  */
- function every(collection, func) {
-    // determine if func is undefined
-    if (func === undefined) {
-    //determine if input collection is array
-    if (Array.isArray(collection)) {
-    //iterate through collection
-        for (var i = 0; i < collection.length; i++) {
-    //if current value is faLsey
-            if (!collection[i]) {
-                return false;
+_.every = function(collection, func){
+// determine if func is undefined
+    if (func === undefined){
+//determine if input collection is array
+        if (Array.isArray(collection)){
+//iterate through collection
+            for (let i = 0; i < collection.length; i++){
+//if current value is faLsey
+                if (!collection[i]){
+                    return false;
             }
         }
-    //else it's not array
-    }else { 
-        for (let key in collection) {
-            if (!collection[key]) {
-                return false;
-            }
-        }
-    }
-    //else it is undefined
-    //determine if collection is array
-    } else { 
-        if (Array.isArray(collection)) {
-            for (let i = 0; i < collection.length; i++) {
-                if (func(collection[i], i, collection) === false)
-                return false;
-            }
-        }
-    
-    }
-    return true;
-}
-module.exports.every = every;
-
-/**
- * some: Function passes an array or object into a callback function and returns true if at least one element results to true
- * @param {Array or Object}: An array or object to pass into given function
- * @param {Function}: Takes in callback function designed to test if individual array element is true or false
- * @return {Boolean}: Function returns a boolean determined by if any element of the input function evaluates to true
- */
- function some(collection, func) {
-    // determine if func is undefined
-    if (func === undefined) {
-        //determine if input collection is array
-        if (Array.isArray(collection)) {
-        //iterate through collection
-            for (var i = 0; i < collection.length; i++) {
-        //if current value is faLsey
-                if (!collection[i]) {
+//else it's not array
+        }else{ 
+            for(let key in collection){
+                if(!collection[key]){
                     return false;
                 }
             }
         }
-        //determine if collection is array
-        } else { 
-            if (Array.isArray(collection)) {
-                for (let i = 0; i < collection.length; i++) {
-                    if (func(collection[i], i, collection) === true)
-                    return true;
-                }   if (func(collection[i], i, collection) === false)
+    }else { 
+    if (Array.isArray(collection)) {
+        for (let i = 0; i < collection.length; i++) {
+            if (func(collection[i], i, collection) === false)
+            return false;
+        }
+    }
+
+}
+return true;
+}
+module.exports.every = every;
+
+/**
+ * some: Function passes a collection into a function and returns true if at least one element results to true
+ * @param {Collection}: A collection to pass into given function
+ * @param {Function}: Function to test each collection value for true or false
+ * @return {Boolean}: Function returns true if any element of the input function evaluates to true or false otherwise
+ */
+_.some = function(collection, func){
+// determine if func is undefined
+    if(func === undefined){
+//determine if input collection is array
+        if(Array.isArray(collection)){
+//iterate through collection
+            for(var i = 0; i < collection.length; i++){
+//if current value is faLsey
+                if(!collection[i]){
                     return false;
+                }
             }
         }
-        return true;
+    //determine if collection is array
+    }else{ 
+        if(Array.isArray(collection)) {
+            for(let i = 0; i < collection.length; i++) {
+                if (func(collection[i], i, collection) === true)
+                return true;
+            }   if (func(collection[i], i, collection) === false)
+                return false;
+        }
+    }
+    return true;
 }
 module.exports.some = some;
 
 /**
- * reduce: Function executes given function on each element of the array, in order, passing in the return value from the 
- * preceding element. The final result is a single value. The first time that the function is run there is no 'return value'. 
- * The seed will be used as the initial value.
+ * reduce: Function executes given function on each element of the array passing in the return value from the 
+ * preceding element. The final result is a single value. The seed will be used as the initial value.
  * @param {Array}: Function takes in an array
- * @param {Function}: Takes in a callback function to have the input array passed through
+ * @param {Function}: Takes in a function to have the input array passed through
  * @return {Value}: Remaining value after array is passed through callback function 
  */
- function reduce(array, func, seed) {
-    //create accumulator value
-    let accumulator; 
-    //determine if seed was not passed in
-    if (seed === undefined) {
-        accumulator = array[0];
-    //continue to nex element and iterate through array
-        for ( var i = 1; i < array.length; i++) {
-            accumulator = func(accumulator, array[i], i, array)
+_.reduce = function(arr, func, seed){
+//determine if seed was not passed in
+    if(seed === undefined){
+        seed = arr[0];
+//iterate through array starting at 1
+        for( var i = 1; i < arr.length; i++){
+//pass seed, current element, index, and array to function
+            seed = func(seed, arr[i], i, arr)
         }
-    //else seed was passed in
-    }else {
-        accumulator = seed;
-        for (let i = 0; i < array.length; i++) {
-            accumulator = func(accumulator, array[i], i, array)
+//else seed was passed in
+    }else{
+//iterate through array starting at 0
+        for(let i = 0; i < arr.length; i++){
+//pass seed, current element, index, and array to function
+            seed = func(seed, arr[i], i, arr)
         }
     }
-        return accumulator;
+    return seed;
 }
 module.exports.reduce = reduce;
 
 /**
- * extend: Function copies the elements from one or more given objects in the order they are given to a single given object.
- * and returns that array.
- * @param {Object}: Object into which any given object will be copied
+ * extend: Function copies the elements from one or more given objects in the order they are given to a single object.
+ * @param {Object}: Object into which other objects will be copied
  * @param {...inputs}: One or more objects that will have their elements copied into the returned object
  * @param {Object}: Function returns an object containing all input objects
  */
- function extend(object1, object2, ...inputs) {
-    Object.assign(object1, object2, ...inputs);
-    return object1
+_.extend = function(obj1, obj2, ...inputs){
+//copy properties from obj2(and any other inputs) to obj1
+    Object.assign(obj1, obj2, ...inputs);
+        return obj1
 }
 module.exports.extend = extend;
     
